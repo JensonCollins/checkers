@@ -30265,9 +30265,9 @@ paths:
                 items:
                   type: object
                   properties:
-                    index:
-                      type: string
                     creator:
+                      type: string
+                    index:
                       type: string
                     game:
                       type: string
@@ -30384,9 +30384,9 @@ paths:
               storedGame:
                 type: object
                 properties:
-                  index:
-                    type: string
                   creator:
+                    type: string
+                  index:
                     type: string
                   game:
                     type: string
@@ -51822,9 +51822,9 @@ definitions:
         items:
           type: object
           properties:
-            index:
-              type: string
             creator:
+              type: string
+            index:
               type: string
             game:
               type: string
@@ -51876,9 +51876,9 @@ definitions:
       storedGame:
         type: object
         properties:
-          index:
-            type: string
           creator:
+            type: string
+          index:
             type: string
           game:
             type: string
@@ -51898,9 +51898,9 @@ definitions:
   jensoncollins.checkers.checkers.StoredGame:
     type: object
     properties:
-      index:
-        type: string
       creator:
+        type: string
+      index:
         type: string
       game:
         type: string

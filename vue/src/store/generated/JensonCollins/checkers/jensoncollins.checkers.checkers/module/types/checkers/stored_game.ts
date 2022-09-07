@@ -4,8 +4,8 @@ import { Writer, Reader } from "protobufjs/minimal";
 export const protobufPackage = "jensoncollins.checkers.checkers";
 
 export interface StoredGame {
-  index: string;
   creator: string;
+  index: string;
   game: string;
   turn: string;
   red: string;
@@ -13,8 +13,8 @@ export interface StoredGame {
 }
 
 const baseStoredGame: object = {
-  index: "",
   creator: "",
+  index: "",
   game: "",
   turn: "",
   red: "",
@@ -23,11 +23,11 @@ const baseStoredGame: object = {
 
 export const StoredGame = {
   encode(message: StoredGame, writer: Writer = Writer.create()): Writer {
-    if (message.index !== "") {
-      writer.uint32(10).string(message.index);
-    }
     if (message.creator !== "") {
-      writer.uint32(18).string(message.creator);
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.index !== "") {
+      writer.uint32(18).string(message.index);
     }
     if (message.game !== "") {
       writer.uint32(26).string(message.game);
@@ -52,10 +52,10 @@ export const StoredGame = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.index = reader.string();
+          message.creator = reader.string();
           break;
         case 2:
-          message.creator = reader.string();
+          message.index = reader.string();
           break;
         case 3:
           message.game = reader.string();
@@ -79,15 +79,15 @@ export const StoredGame = {
 
   fromJSON(object: any): StoredGame {
     const message = { ...baseStoredGame } as StoredGame;
-    if (object.index !== undefined && object.index !== null) {
-      message.index = String(object.index);
-    } else {
-      message.index = "";
-    }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = String(object.creator);
     } else {
       message.creator = "";
+    }
+    if (object.index !== undefined && object.index !== null) {
+      message.index = String(object.index);
+    } else {
+      message.index = "";
     }
     if (object.game !== undefined && object.game !== null) {
       message.game = String(object.game);
@@ -114,8 +114,8 @@ export const StoredGame = {
 
   toJSON(message: StoredGame): unknown {
     const obj: any = {};
-    message.index !== undefined && (obj.index = message.index);
     message.creator !== undefined && (obj.creator = message.creator);
+    message.index !== undefined && (obj.index = message.index);
     message.game !== undefined && (obj.game = message.game);
     message.turn !== undefined && (obj.turn = message.turn);
     message.red !== undefined && (obj.red = message.red);
@@ -125,15 +125,15 @@ export const StoredGame = {
 
   fromPartial(object: DeepPartial<StoredGame>): StoredGame {
     const message = { ...baseStoredGame } as StoredGame;
-    if (object.index !== undefined && object.index !== null) {
-      message.index = object.index;
-    } else {
-      message.index = "";
-    }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator;
     } else {
       message.creator = "";
+    }
+    if (object.index !== undefined && object.index !== null) {
+      message.index = object.index;
+    } else {
+      message.index = "";
     }
     if (object.game !== undefined && object.game !== null) {
       message.game = object.game;
