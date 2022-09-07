@@ -19,12 +19,38 @@ func TestGenesisState_Validate(t *testing.T) {
 			valid:    true,
 		},
 		{
-			desc:     "valid genesis state",
+			desc: "valid genesis state",
 			genState: &types.GenesisState{
 
+				NextGame: &types.NextGame{
+					Creator: "11",
+					IdValue: 5,
+				},
+				StoredGameList: []types.StoredGame{
+					{
+						Index: "0",
+					},
+					{
+						Index: "1",
+					},
+				},
 				// this line is used by starport scaffolding # types/genesis/validField
 			},
 			valid: true,
+		},
+		{
+			desc: "duplicated storedGame",
+			genState: &types.GenesisState{
+				StoredGameList: []types.StoredGame{
+					{
+						Index: "0",
+					},
+					{
+						Index: "0",
+					},
+				},
+			},
+			valid: false,
 		},
 		// this line is used by starport scaffolding # types/genesis/testcase
 	} {
@@ -37,4 +63,20 @@ func TestGenesisState_Validate(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestDefaultGenesisIsCorrect(t *testing.T) {
+	require.EqualValues(t,
+		&types.GenesisState{
+			StoredGameList: []types.StoredGame{
+				{
+					Index: "0",
+				},
+				{
+					Index: "1",
+				},
+			},
+			NextGame: &types.NextGame{"", uint64(1)},
+		},
+		types.DefaultGenesis())
 }
