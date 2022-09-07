@@ -68,15 +68,8 @@ func TestGenesisState_Validate(t *testing.T) {
 func TestDefaultGenesisIsCorrect(t *testing.T) {
 	require.EqualValues(t,
 		&types.GenesisState{
-			StoredGameList: []types.StoredGame{
-				{
-					Index: "0",
-				},
-				{
-					Index: "1",
-				},
-			},
-			NextGame: &types.NextGame{"", uint64(1)},
+			StoredGameList: []types.StoredGame{},
+			NextGame:       &types.NextGame{"", uint64(1)},
 		},
 		types.DefaultGenesis())
 }
