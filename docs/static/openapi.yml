@@ -30369,6 +30369,16 @@ paths:
           in: query
           required: false
           type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
       tags:
         - Query
   '/JensonCollins/checkers/checkers/stored_game/{index}':
@@ -51803,6 +51813,11 @@ definitions:
     description: |-
       Version defines the versioning scheme used to negotiate the IBC verison in
       the connection handshake.
+  jensoncollins.checkers.checkers.MsgCreateGameResponse:
+    type: object
+    properties:
+      idValue:
+        type: string
   jensoncollins.checkers.checkers.NextGame:
     type: object
     properties:
