@@ -30277,6 +30277,9 @@ paths:
                       type: string
                     black:
                       type: string
+                    moveCount:
+                      type: string
+                      format: uint64
               pagination:
                 type: object
                 properties:
@@ -30406,6 +30409,9 @@ paths:
                     type: string
                   black:
                     type: string
+                  moveCount:
+                    type: string
+                    format: uint64
         default:
           description: An unexpected error response.
           schema:
@@ -51831,6 +51837,8 @@ definitions:
         format: int64
       winner:
         type: string
+  jensoncollins.checkers.checkers.MsgRejectGameResponse:
+    type: object
   jensoncollins.checkers.checkers.NextGame:
     type: object
     properties:
@@ -51862,6 +51870,9 @@ definitions:
               type: string
             black:
               type: string
+            moveCount:
+              type: string
+              format: uint64
       pagination:
         type: object
         properties:
@@ -51916,6 +51927,9 @@ definitions:
             type: string
           black:
             type: string
+          moveCount:
+            type: string
+            format: uint64
   jensoncollins.checkers.checkers.QueryParamsResponse:
     type: object
     properties:
@@ -51938,6 +51952,9 @@ definitions:
         type: string
       black:
         type: string
+      moveCount:
+        type: string
+        format: uint64
   tendermint.spn.monitoringp.ConnectionChannelID:
     type: object
     properties:
