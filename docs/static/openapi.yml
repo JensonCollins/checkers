@@ -30194,6 +30194,10 @@ paths:
                   idValue:
                     type: string
                     format: uint64
+                  fifoHeadIndex:
+                    type: string
+                  fifoTailIndex:
+                    type: string
         default:
           description: An unexpected error response.
           schema:
@@ -30265,21 +30269,23 @@ paths:
                 items:
                   type: object
                   properties:
-                    creator:
-                      type: string
                     index:
                       type: string
-                    game:
+                    board:
                       type: string
                     turn:
                       type: string
-                    red:
-                      type: string
                     black:
+                      type: string
+                    red:
                       type: string
                     moveCount:
                       type: string
                       format: uint64
+                    beforeIndex:
+                      type: string
+                    afterIndex:
+                      type: string
               pagination:
                 type: object
                 properties:
@@ -30372,16 +30378,6 @@ paths:
           in: query
           required: false
           type: boolean
-        - name: pagination.reverse
-          description: >-
-            reverse is set to true if results are to be returned in the
-            descending order.
-
-
-            Since: cosmos-sdk 0.43
-          in: query
-          required: false
-          type: boolean
       tags:
         - Query
   '/JensonCollins/checkers/checkers/stored_game/{index}':
@@ -30397,21 +30393,23 @@ paths:
               storedGame:
                 type: object
                 properties:
-                  creator:
-                    type: string
                   index:
                     type: string
-                  game:
+                  board:
                     type: string
                   turn:
                     type: string
-                  red:
-                    type: string
                   black:
+                    type: string
+                  red:
                     type: string
                   moveCount:
                     type: string
                     format: uint64
+                  beforeIndex:
+                    type: string
+                  afterIndex:
+                    type: string
         default:
           description: An unexpected error response.
           schema:
@@ -30435,6 +30433,46 @@ paths:
           in: path
           required: true
           type: string
+      tags:
+        - Query
+  /JensonCollins/checkers/checkers/system_info:
+    get:
+      summary: Queries a SystemInfo by index.
+      operationId: JensoncollinsCheckersCheckersSystemInfo
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              SystemInfo:
+                type: object
+                properties:
+                  nextId:
+                    type: string
+                    format: uint64
+                  fifoHeadIndex:
+                    type: string
+                  fifoTailIndex:
+                    type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
       tags:
         - Query
   /tendermint/spn/monitoringp/connection_channel_id:
@@ -51847,6 +51885,10 @@ definitions:
       idValue:
         type: string
         format: uint64
+      fifoHeadIndex:
+        type: string
+      fifoTailIndex:
+        type: string
   jensoncollins.checkers.checkers.Params:
     type: object
     description: Params defines the parameters for the module.
@@ -51858,21 +51900,23 @@ definitions:
         items:
           type: object
           properties:
-            creator:
-              type: string
             index:
               type: string
-            game:
+            board:
               type: string
             turn:
               type: string
-            red:
-              type: string
             black:
+              type: string
+            red:
               type: string
             moveCount:
               type: string
               format: uint64
+            beforeIndex:
+              type: string
+            afterIndex:
+              type: string
       pagination:
         type: object
         properties:
@@ -51909,27 +51953,46 @@ definitions:
           idValue:
             type: string
             format: uint64
+          fifoHeadIndex:
+            type: string
+          fifoTailIndex:
+            type: string
   jensoncollins.checkers.checkers.QueryGetStoredGameResponse:
     type: object
     properties:
       storedGame:
         type: object
         properties:
-          creator:
-            type: string
           index:
             type: string
-          game:
+          board:
             type: string
           turn:
             type: string
-          red:
-            type: string
           black:
+            type: string
+          red:
             type: string
           moveCount:
             type: string
             format: uint64
+          beforeIndex:
+            type: string
+          afterIndex:
+            type: string
+  jensoncollins.checkers.checkers.QueryGetSystemInfoResponse:
+    type: object
+    properties:
+      SystemInfo:
+        type: object
+        properties:
+          nextId:
+            type: string
+            format: uint64
+          fifoHeadIndex:
+            type: string
+          fifoTailIndex:
+            type: string
   jensoncollins.checkers.checkers.QueryParamsResponse:
     type: object
     properties:
@@ -51940,21 +52003,33 @@ definitions:
   jensoncollins.checkers.checkers.StoredGame:
     type: object
     properties:
-      creator:
-        type: string
       index:
         type: string
-      game:
+      board:
         type: string
       turn:
         type: string
-      red:
-        type: string
       black:
+        type: string
+      red:
         type: string
       moveCount:
         type: string
         format: uint64
+      beforeIndex:
+        type: string
+      afterIndex:
+        type: string
+  jensoncollins.checkers.checkers.SystemInfo:
+    type: object
+    properties:
+      nextId:
+        type: string
+        format: uint64
+      fifoHeadIndex:
+        type: string
+      fifoTailIndex:
+        type: string
   tendermint.spn.monitoringp.ConnectionChannelID:
     type: object
     properties:

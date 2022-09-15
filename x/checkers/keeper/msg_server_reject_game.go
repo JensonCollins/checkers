@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"strings"
 
 	"github.com/JensonCollins/checkers/x/checkers/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -12,34 +11,35 @@ import (
 func (k msgServer) RejectGame(goCtx context.Context, msg *types.MsgRejectGame) (*types.MsgRejectGameResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	storedGame, found := k.Keeper.GetStoredGame(ctx, msg.IdValue)
+	storedGame, found := k.Keeper.GetStoredGame(ctx, msg.GameIndex)
 	if !found {
-		return nil, sdkerrors.Wrapf(types.ErrGameNotFound, "game not found %s", msg.IdValue)
+		return nil, sdkerrors.Wrapf(types.ErrGameNotFound, "%s", msg.GameIndex)
 	}
 
-	// Is it an expected player? And did the player already play?
-	if strings.Compare(storedGame.Red, msg.Creator) == 0 {
-		if 1 < storedGame.MoveCount {
-			return nil, types.ErrRedAlreadyPlayed
-		}
-	} else if strings.Compare(storedGame.Black, msg.Creator) == 0 {
+	if storedGame.Black == msg.Creator {
 		if 0 < storedGame.MoveCount {
 			return nil, types.ErrBlackAlreadyPlayed
 		}
+	} else if storedGame.Red == msg.Creator {
+		if 1 < storedGame.MoveCount {
+			return nil, types.ErrRedAlreadyPlayed
+		}
 	} else {
-		return nil, types.ErrCreatorNotPlayer
+		return nil, sdkerrors.Wrapf(types.ErrCreatorNotPlayer, "%s", msg.Creator)
 	}
 
-	// Remove the game completely as it is not interesting to keep it.
-	k.Keeper.RemoveStoredGame(ctx, msg.IdValue)
+	systemInfo, found := k.Keeper.GetSystemInfo(ctx)
+	if !found {
+		panic("SystemInfo not found")
+	}
+	k.Keeper.RemoveFromFifo(ctx, &storedGame, &systemInfo)
+	k.Keeper.RemoveStoredGame(ctx, msg.GameIndex)
+	k.Keeper.SetSystemInfo(ctx, systemInfo)
 
-	// What to emit
 	ctx.EventManager().EmitEvent(
-		sdk.NewEvent(sdk.EventTypeMessage,
-			sdk.NewAttribute(sdk.AttributeKeyModule, types.ModuleName),
-			sdk.NewAttribute(sdk.AttributeKeyAction, types.RejectGameEventKey),
-			sdk.NewAttribute(types.RejectGameEventCreator, msg.Creator),
-			sdk.NewAttribute(types.RejectGameEventIdValue, msg.IdValue),
+		sdk.NewEvent(types.GameRejectedEventType,
+			sdk.NewAttribute(types.GameRejectedEventCreator, msg.Creator),
+			sdk.NewAttribute(types.GameRejectedEventGameIndex, msg.GameIndex),
 		),
 	)
 

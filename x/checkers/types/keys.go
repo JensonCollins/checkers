@@ -43,7 +43,21 @@ const (
 )
 
 const (
-    RejectGameEventKey     = "GameRejected"
-    RejectGameEventCreator = "Creator"
-    RejectGameEventIdValue = "IdValue"
+	RejectGameEventKey     = "GameRejected"
+	RejectGameEventCreator = "Creator"
+	RejectGameEventIdValue = "IdValue"
+)
+
+const (
+	GameRejectedEventType      = "game-rejected"
+	GameRejectedEventCreator   = "creator"
+	GameRejectedEventGameIndex = "game-index"
+)
+
+const (
+	NoFifoIndex = "-1"
+)
+
+const (
+	SystemInfoKey = "SystemInfo-value-"
 )

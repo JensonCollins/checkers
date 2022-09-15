@@ -56,12 +56,18 @@ func (k msgServer) PlayMove(goCtx context.Context, msg *types.MsgPlayMove) (*typ
 	if moveErr != nil {
 		return nil, sdkerrors.Wrapf(types.ErrWrongMove, moveErr.Error())
 	}
+	systemInfo, found := k.Keeper.GetSystemInfo(ctx)
+	if !found {
+		panic("SystemInfo not found")
+	}
+	k.Keeper.SendToFifoTail(ctx, &storedGame, &systemInfo)
 
 	// Save for the next play move
 	storedGame.MoveCount++
-	storedGame.Game = game.String()
+	storedGame.Board = game.String()
 	storedGame.Turn = rules.PieceStrings[game.Turn]
 	k.Keeper.SetStoredGame(ctx, storedGame)
+	k.Keeper.SetSystemInfo(ctx, systemInfo)
 
 	// What to emit
 	ctx.EventManager().EmitEvent(

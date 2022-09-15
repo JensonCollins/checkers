@@ -5,47 +5,52 @@ import { util, configure, Writer, Reader } from "protobufjs/minimal";
 export const protobufPackage = "jensoncollins.checkers.checkers";
 
 export interface StoredGame {
-  creator: string;
   index: string;
-  game: string;
+  board: string;
   turn: string;
-  red: string;
   black: string;
+  red: string;
   moveCount: number;
+  beforeIndex: string;
+  afterIndex: string;
 }
 
 const baseStoredGame: object = {
-  creator: "",
   index: "",
-  game: "",
+  board: "",
   turn: "",
-  red: "",
   black: "",
+  red: "",
   moveCount: 0,
+  beforeIndex: "",
+  afterIndex: "",
 };
 
 export const StoredGame = {
   encode(message: StoredGame, writer: Writer = Writer.create()): Writer {
-    if (message.creator !== "") {
-      writer.uint32(10).string(message.creator);
-    }
     if (message.index !== "") {
-      writer.uint32(18).string(message.index);
+      writer.uint32(10).string(message.index);
     }
-    if (message.game !== "") {
-      writer.uint32(26).string(message.game);
+    if (message.board !== "") {
+      writer.uint32(18).string(message.board);
     }
     if (message.turn !== "") {
-      writer.uint32(34).string(message.turn);
+      writer.uint32(26).string(message.turn);
+    }
+    if (message.black !== "") {
+      writer.uint32(34).string(message.black);
     }
     if (message.red !== "") {
       writer.uint32(42).string(message.red);
     }
-    if (message.black !== "") {
-      writer.uint32(50).string(message.black);
-    }
     if (message.moveCount !== 0) {
-      writer.uint32(56).uint64(message.moveCount);
+      writer.uint32(48).uint64(message.moveCount);
+    }
+    if (message.beforeIndex !== "") {
+      writer.uint32(58).string(message.beforeIndex);
+    }
+    if (message.afterIndex !== "") {
+      writer.uint32(66).string(message.afterIndex);
     }
     return writer;
   },
@@ -58,25 +63,28 @@ export const StoredGame = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.creator = reader.string();
-          break;
-        case 2:
           message.index = reader.string();
           break;
+        case 2:
+          message.board = reader.string();
+          break;
         case 3:
-          message.game = reader.string();
+          message.turn = reader.string();
           break;
         case 4:
-          message.turn = reader.string();
+          message.black = reader.string();
           break;
         case 5:
           message.red = reader.string();
           break;
         case 6:
-          message.black = reader.string();
+          message.moveCount = longToNumber(reader.uint64() as Long);
           break;
         case 7:
-          message.moveCount = longToNumber(reader.uint64() as Long);
+          message.beforeIndex = reader.string();
+          break;
+        case 8:
+          message.afterIndex = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -88,92 +96,104 @@ export const StoredGame = {
 
   fromJSON(object: any): StoredGame {
     const message = { ...baseStoredGame } as StoredGame;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
     if (object.index !== undefined && object.index !== null) {
       message.index = String(object.index);
     } else {
       message.index = "";
     }
-    if (object.game !== undefined && object.game !== null) {
-      message.game = String(object.game);
+    if (object.board !== undefined && object.board !== null) {
+      message.board = String(object.board);
     } else {
-      message.game = "";
+      message.board = "";
     }
     if (object.turn !== undefined && object.turn !== null) {
       message.turn = String(object.turn);
     } else {
       message.turn = "";
     }
-    if (object.red !== undefined && object.red !== null) {
-      message.red = String(object.red);
-    } else {
-      message.red = "";
-    }
     if (object.black !== undefined && object.black !== null) {
       message.black = String(object.black);
     } else {
       message.black = "";
+    }
+    if (object.red !== undefined && object.red !== null) {
+      message.red = String(object.red);
+    } else {
+      message.red = "";
     }
     if (object.moveCount !== undefined && object.moveCount !== null) {
       message.moveCount = Number(object.moveCount);
     } else {
       message.moveCount = 0;
     }
+    if (object.beforeIndex !== undefined && object.beforeIndex !== null) {
+      message.beforeIndex = String(object.beforeIndex);
+    } else {
+      message.beforeIndex = "";
+    }
+    if (object.afterIndex !== undefined && object.afterIndex !== null) {
+      message.afterIndex = String(object.afterIndex);
+    } else {
+      message.afterIndex = "";
+    }
     return message;
   },
 
   toJSON(message: StoredGame): unknown {
     const obj: any = {};
-    message.creator !== undefined && (obj.creator = message.creator);
     message.index !== undefined && (obj.index = message.index);
-    message.game !== undefined && (obj.game = message.game);
+    message.board !== undefined && (obj.board = message.board);
     message.turn !== undefined && (obj.turn = message.turn);
-    message.red !== undefined && (obj.red = message.red);
     message.black !== undefined && (obj.black = message.black);
+    message.red !== undefined && (obj.red = message.red);
     message.moveCount !== undefined && (obj.moveCount = message.moveCount);
+    message.beforeIndex !== undefined &&
+      (obj.beforeIndex = message.beforeIndex);
+    message.afterIndex !== undefined && (obj.afterIndex = message.afterIndex);
     return obj;
   },
 
   fromPartial(object: DeepPartial<StoredGame>): StoredGame {
     const message = { ...baseStoredGame } as StoredGame;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
     if (object.index !== undefined && object.index !== null) {
       message.index = object.index;
     } else {
       message.index = "";
     }
-    if (object.game !== undefined && object.game !== null) {
-      message.game = object.game;
+    if (object.board !== undefined && object.board !== null) {
+      message.board = object.board;
     } else {
-      message.game = "";
+      message.board = "";
     }
     if (object.turn !== undefined && object.turn !== null) {
       message.turn = object.turn;
     } else {
       message.turn = "";
     }
-    if (object.red !== undefined && object.red !== null) {
-      message.red = object.red;
-    } else {
-      message.red = "";
-    }
     if (object.black !== undefined && object.black !== null) {
       message.black = object.black;
     } else {
       message.black = "";
     }
+    if (object.red !== undefined && object.red !== null) {
+      message.red = object.red;
+    } else {
+      message.red = "";
+    }
     if (object.moveCount !== undefined && object.moveCount !== null) {
       message.moveCount = object.moveCount;
     } else {
       message.moveCount = 0;
+    }
+    if (object.beforeIndex !== undefined && object.beforeIndex !== null) {
+      message.beforeIndex = object.beforeIndex;
+    } else {
+      message.beforeIndex = "";
+    }
+    if (object.afterIndex !== undefined && object.afterIndex !== null) {
+      message.afterIndex = object.afterIndex;
+    } else {
+      message.afterIndex = "";
     }
     return message;
   },

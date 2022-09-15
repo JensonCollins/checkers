@@ -2,6 +2,7 @@
 import { Params } from "../checkers/params";
 import { NextGame } from "../checkers/next_game";
 import { StoredGame } from "../checkers/stored_game";
+import { SystemInfo } from "../checkers/system_info";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "jensoncollins.checkers.checkers";
@@ -10,8 +11,9 @@ export const protobufPackage = "jensoncollins.checkers.checkers";
 export interface GenesisState {
   params: Params | undefined;
   nextGame: NextGame | undefined;
-  /** this line is used by starport scaffolding # genesis/proto/state */
   storedGameList: StoredGame[];
+  /** this line is used by starport scaffolding # genesis/proto/state */
+  systemInfo: SystemInfo | undefined;
 }
 
 const baseGenesisState: object = {};
@@ -26,6 +28,9 @@ export const GenesisState = {
     }
     for (const v of message.storedGameList) {
       StoredGame.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.systemInfo !== undefined) {
+      SystemInfo.encode(message.systemInfo, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -48,6 +53,9 @@ export const GenesisState = {
           message.storedGameList.push(
             StoredGame.decode(reader, reader.uint32())
           );
+          break;
+        case 4:
+          message.systemInfo = SystemInfo.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -75,6 +83,11 @@ export const GenesisState = {
         message.storedGameList.push(StoredGame.fromJSON(e));
       }
     }
+    if (object.systemInfo !== undefined && object.systemInfo !== null) {
+      message.systemInfo = SystemInfo.fromJSON(object.systemInfo);
+    } else {
+      message.systemInfo = undefined;
+    }
     return message;
   },
 
@@ -93,6 +106,10 @@ export const GenesisState = {
     } else {
       obj.storedGameList = [];
     }
+    message.systemInfo !== undefined &&
+      (obj.systemInfo = message.systemInfo
+        ? SystemInfo.toJSON(message.systemInfo)
+        : undefined);
     return obj;
   },
 
@@ -113,6 +130,11 @@ export const GenesisState = {
       for (const e of object.storedGameList) {
         message.storedGameList.push(StoredGame.fromPartial(e));
       }
+    }
+    if (object.systemInfo !== undefined && object.systemInfo !== null) {
+      message.systemInfo = SystemInfo.fromPartial(object.systemInfo);
+    } else {
+      message.systemInfo = undefined;
     }
     return message;
   },

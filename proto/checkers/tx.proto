@@ -41,7 +41,7 @@ message MsgPlayMoveResponse {
 
 message MsgRejectGame {
   string creator = 1;
-  string idValue = 2;
+  string GameIndex = 2;
 }
 
 message MsgRejectGameResponse {

@@ -32,7 +32,7 @@ export interface MsgPlayMoveResponse {
 
 export interface MsgRejectGame {
   creator: string;
-  idValue: string;
+  GameIndex: string;
 }
 
 export interface MsgRejectGameResponse {}
@@ -447,15 +447,15 @@ export const MsgPlayMoveResponse = {
   },
 };
 
-const baseMsgRejectGame: object = { creator: "", idValue: "" };
+const baseMsgRejectGame: object = { creator: "", GameIndex: "" };
 
 export const MsgRejectGame = {
   encode(message: MsgRejectGame, writer: Writer = Writer.create()): Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
     }
-    if (message.idValue !== "") {
-      writer.uint32(18).string(message.idValue);
+    if (message.GameIndex !== "") {
+      writer.uint32(18).string(message.GameIndex);
     }
     return writer;
   },
@@ -471,7 +471,7 @@ export const MsgRejectGame = {
           message.creator = reader.string();
           break;
         case 2:
-          message.idValue = reader.string();
+          message.GameIndex = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -488,10 +488,10 @@ export const MsgRejectGame = {
     } else {
       message.creator = "";
     }
-    if (object.idValue !== undefined && object.idValue !== null) {
-      message.idValue = String(object.idValue);
+    if (object.GameIndex !== undefined && object.GameIndex !== null) {
+      message.GameIndex = String(object.GameIndex);
     } else {
-      message.idValue = "";
+      message.GameIndex = "";
     }
     return message;
   },
@@ -499,7 +499,7 @@ export const MsgRejectGame = {
   toJSON(message: MsgRejectGame): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.idValue !== undefined && (obj.idValue = message.idValue);
+    message.GameIndex !== undefined && (obj.GameIndex = message.GameIndex);
     return obj;
   },
 
@@ -510,10 +510,10 @@ export const MsgRejectGame = {
     } else {
       message.creator = "";
     }
-    if (object.idValue !== undefined && object.idValue !== null) {
-      message.idValue = object.idValue;
+    if (object.GameIndex !== undefined && object.GameIndex !== null) {
+      message.GameIndex = object.GameIndex;
     } else {
-      message.idValue = "";
+      message.GameIndex = "";
     }
     return message;
   },

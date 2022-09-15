@@ -3,9 +3,10 @@ import { txClient, queryClient, MissingWalletError , registry} from './module'
 import { NextGame } from "./module/types/checkers/next_game"
 import { Params } from "./module/types/checkers/params"
 import { StoredGame } from "./module/types/checkers/stored_game"
+import { SystemInfo } from "./module/types/checkers/system_info"
 
 
-export { NextGame, Params, StoredGame };
+export { NextGame, Params, StoredGame, SystemInfo };
 
 async function initTxClient(vuexGetters) {
 	return await txClient(vuexGetters['common/wallet/signer'], {
@@ -47,11 +48,13 @@ const getDefaultState = () => {
 				NextGame: {},
 				StoredGame: {},
 				StoredGameAll: {},
+				SystemInfo: {},
 				
 				_Structure: {
 						NextGame: getStructure(NextGame.fromPartial({})),
 						Params: getStructure(Params.fromPartial({})),
 						StoredGame: getStructure(StoredGame.fromPartial({})),
+						SystemInfo: getStructure(SystemInfo.fromPartial({})),
 						
 		},
 		_Registry: registry,
@@ -103,6 +106,12 @@ export default {
 						(<any> params).query=null
 					}
 			return state.StoredGameAll[JSON.stringify(params)] ?? {}
+		},
+				getSystemInfo: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.SystemInfo[JSON.stringify(params)] ?? {}
 		},
 				
 		getTypeStructure: (state) => (type) => {
@@ -230,18 +239,40 @@ export default {
 		},
 		
 		
-		async sendMsgPlayMove({ rootGetters }, { value, fee = [], memo = '' }) {
+		
+		
+		 		
+		
+		
+		async QuerySystemInfo({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params, query=null }) {
+			try {
+				const key = params ?? {};
+				const queryClient=await initQueryClient(rootGetters)
+				let value= (await queryClient.querySystemInfo()).data
+				
+					
+				commit('QUERY', { query: 'SystemInfo', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QuerySystemInfo', payload: { options: { all }, params: {...key},query }})
+				return getters['getSystemInfo']( { params: {...key}, query}) ?? {}
+			} catch (e) {
+				throw new Error('QueryClient:QuerySystemInfo API Node Unavailable. Could not perform query: ' + e.message)
+				
+			}
+		},
+		
+		
+		async sendMsgCreateGame({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
-				const msg = await txClient.msgPlayMove(value)
+				const msg = await txClient.msgCreateGame(value)
 				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
 	gas: "200000" }, memo})
 				return result
 			} catch (e) {
 				if (e == MissingWalletError) {
-					throw new Error('TxClient:MsgPlayMove:Init Could not initialize signing client. Wallet is required.')
+					throw new Error('TxClient:MsgCreateGame:Init Could not initialize signing client. Wallet is required.')
 				}else{
-					throw new Error('TxClient:MsgPlayMove:Send Could not broadcast Tx: '+ e.message)
+					throw new Error('TxClient:MsgCreateGame:Send Could not broadcast Tx: '+ e.message)
 				}
 			}
 		},
@@ -260,32 +291,32 @@ export default {
 				}
 			}
 		},
-		async sendMsgCreateGame({ rootGetters }, { value, fee = [], memo = '' }) {
+		async sendMsgPlayMove({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
-				const msg = await txClient.msgCreateGame(value)
+				const msg = await txClient.msgPlayMove(value)
 				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
 	gas: "200000" }, memo})
 				return result
 			} catch (e) {
 				if (e == MissingWalletError) {
-					throw new Error('TxClient:MsgCreateGame:Init Could not initialize signing client. Wallet is required.')
+					throw new Error('TxClient:MsgPlayMove:Init Could not initialize signing client. Wallet is required.')
 				}else{
-					throw new Error('TxClient:MsgCreateGame:Send Could not broadcast Tx: '+ e.message)
+					throw new Error('TxClient:MsgPlayMove:Send Could not broadcast Tx: '+ e.message)
 				}
 			}
 		},
 		
-		async MsgPlayMove({ rootGetters }, { value }) {
+		async MsgCreateGame({ rootGetters }, { value }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
-				const msg = await txClient.msgPlayMove(value)
+				const msg = await txClient.msgCreateGame(value)
 				return msg
 			} catch (e) {
 				if (e == MissingWalletError) {
-					throw new Error('TxClient:MsgPlayMove:Init Could not initialize signing client. Wallet is required.')
+					throw new Error('TxClient:MsgCreateGame:Init Could not initialize signing client. Wallet is required.')
 				} else{
-					throw new Error('TxClient:MsgPlayMove:Create Could not create message: ' + e.message)
+					throw new Error('TxClient:MsgCreateGame:Create Could not create message: ' + e.message)
 				}
 			}
 		},
@@ -302,16 +333,16 @@ export default {
 				}
 			}
 		},
-		async MsgCreateGame({ rootGetters }, { value }) {
+		async MsgPlayMove({ rootGetters }, { value }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
-				const msg = await txClient.msgCreateGame(value)
+				const msg = await txClient.msgPlayMove(value)
 				return msg
 			} catch (e) {
 				if (e == MissingWalletError) {
-					throw new Error('TxClient:MsgCreateGame:Init Could not initialize signing client. Wallet is required.')
+					throw new Error('TxClient:MsgPlayMove:Init Could not initialize signing client. Wallet is required.')
 				} else{
-					throw new Error('TxClient:MsgCreateGame:Create Could not create message: ' + e.message)
+					throw new Error('TxClient:MsgPlayMove:Create Could not create message: ' + e.message)
 				}
 			}
 		},

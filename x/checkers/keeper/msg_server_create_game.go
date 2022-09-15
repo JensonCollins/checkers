@@ -12,31 +12,33 @@ import (
 func (k msgServer) CreateGame(goCtx context.Context, msg *types.MsgCreateGame) (*types.MsgCreateGameResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// TODO: Handling the message
-	nextGame, found := k.Keeper.GetNextGame(ctx)
+	systemInfo, found := k.Keeper.GetSystemInfo(ctx)
 	if !found {
-		panic("NextGame not found")
+		panic("SystemInfo not found")
 	}
-	newIndex := strconv.FormatUint(nextGame.IdValue, 10)
+	newIndex := strconv.FormatUint(systemInfo.NextId, 10)
+
 	newGame := rules.New()
 	storedGame := types.StoredGame{
-		Creator: msg.Creator,
-		Index:   newIndex,
-		Game:    newGame.String(),
-		Turn:    rules.PieceStrings[newGame.Turn],
-		Red:     msg.Red,
-		Black:   msg.Black,
-		MoveCount: 0,
+		Index:       newIndex,
+		Board:       newGame.String(),
+		Turn:        rules.PieceStrings[newGame.Turn],
+		Black:       msg.Black,
+		Red:         msg.Red,
+		MoveCount:   0,
+		BeforeIndex: types.NoFifoIndex,
+		AfterIndex:  types.NoFifoIndex,
 	}
 	err := storedGame.Validate()
 	if err != nil {
 		return nil, err
 	}
 
+	k.Keeper.SendToFifoTail(ctx, &storedGame, &systemInfo)
 	k.Keeper.SetStoredGame(ctx, storedGame)
 
-	nextGame.IdValue++
-	k.Keeper.SetNextGame(ctx, nextGame)
+	systemInfo.NextId++
+	k.Keeper.SetSystemInfo(ctx, systemInfo)
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(sdk.EventTypeMessage,

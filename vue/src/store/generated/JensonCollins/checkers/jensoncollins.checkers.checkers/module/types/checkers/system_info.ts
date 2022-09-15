@@ -4,54 +4,48 @@ import { util, configure, Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "jensoncollins.checkers.checkers";
 
-export interface NextGame {
-  creator: string;
-  idValue: number;
+export interface SystemInfo {
+  nextId: number;
+  /** Will contain the index of the game at the head. */
   fifoHeadIndex: string;
+  /** Will contain the index of the game at the tail. */
   fifoTailIndex: string;
 }
 
-const baseNextGame: object = {
-  creator: "",
-  idValue: 0,
+const baseSystemInfo: object = {
+  nextId: 0,
   fifoHeadIndex: "",
   fifoTailIndex: "",
 };
 
-export const NextGame = {
-  encode(message: NextGame, writer: Writer = Writer.create()): Writer {
-    if (message.creator !== "") {
-      writer.uint32(10).string(message.creator);
-    }
-    if (message.idValue !== 0) {
-      writer.uint32(16).uint64(message.idValue);
+export const SystemInfo = {
+  encode(message: SystemInfo, writer: Writer = Writer.create()): Writer {
+    if (message.nextId !== 0) {
+      writer.uint32(8).uint64(message.nextId);
     }
     if (message.fifoHeadIndex !== "") {
-      writer.uint32(26).string(message.fifoHeadIndex);
+      writer.uint32(18).string(message.fifoHeadIndex);
     }
     if (message.fifoTailIndex !== "") {
-      writer.uint32(34).string(message.fifoTailIndex);
+      writer.uint32(26).string(message.fifoTailIndex);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): NextGame {
+  decode(input: Reader | Uint8Array, length?: number): SystemInfo {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseNextGame } as NextGame;
+    const message = { ...baseSystemInfo } as SystemInfo;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.creator = reader.string();
+          message.nextId = longToNumber(reader.uint64() as Long);
           break;
         case 2:
-          message.idValue = longToNumber(reader.uint64() as Long);
-          break;
-        case 3:
           message.fifoHeadIndex = reader.string();
           break;
-        case 4:
+        case 3:
           message.fifoTailIndex = reader.string();
           break;
         default:
@@ -62,17 +56,12 @@ export const NextGame = {
     return message;
   },
 
-  fromJSON(object: any): NextGame {
-    const message = { ...baseNextGame } as NextGame;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
+  fromJSON(object: any): SystemInfo {
+    const message = { ...baseSystemInfo } as SystemInfo;
+    if (object.nextId !== undefined && object.nextId !== null) {
+      message.nextId = Number(object.nextId);
     } else {
-      message.creator = "";
-    }
-    if (object.idValue !== undefined && object.idValue !== null) {
-      message.idValue = Number(object.idValue);
-    } else {
-      message.idValue = 0;
+      message.nextId = 0;
     }
     if (object.fifoHeadIndex !== undefined && object.fifoHeadIndex !== null) {
       message.fifoHeadIndex = String(object.fifoHeadIndex);
@@ -87,10 +76,9 @@ export const NextGame = {
     return message;
   },
 
-  toJSON(message: NextGame): unknown {
+  toJSON(message: SystemInfo): unknown {
     const obj: any = {};
-    message.creator !== undefined && (obj.creator = message.creator);
-    message.idValue !== undefined && (obj.idValue = message.idValue);
+    message.nextId !== undefined && (obj.nextId = message.nextId);
     message.fifoHeadIndex !== undefined &&
       (obj.fifoHeadIndex = message.fifoHeadIndex);
     message.fifoTailIndex !== undefined &&
@@ -98,17 +86,12 @@ export const NextGame = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<NextGame>): NextGame {
-    const message = { ...baseNextGame } as NextGame;
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
+  fromPartial(object: DeepPartial<SystemInfo>): SystemInfo {
+    const message = { ...baseSystemInfo } as SystemInfo;
+    if (object.nextId !== undefined && object.nextId !== null) {
+      message.nextId = object.nextId;
     } else {
-      message.creator = "";
-    }
-    if (object.idValue !== undefined && object.idValue !== null) {
-      message.idValue = object.idValue;
-    } else {
-      message.idValue = 0;
+      message.nextId = 0;
     }
     if (object.fifoHeadIndex !== undefined && object.fifoHeadIndex !== null) {
       message.fifoHeadIndex = object.fifoHeadIndex;
