@@ -4,15 +4,16 @@ import (
 	"context"
 	"testing"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/stretchr/testify/require"
+	keepertest "github.com/JensonCollins/checkers/testutil/keeper"
 	"github.com/JensonCollins/checkers/x/checkers"
 	"github.com/JensonCollins/checkers/x/checkers/keeper"
 	"github.com/JensonCollins/checkers/x/checkers/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/stretchr/testify/require"
 )
 
 func setupMsgServerWithOneGameForRejectGame(t testing.TB) (types.MsgServer, keeper.Keeper, context.Context) {
-	k, ctx := setupKeeper(t)
+	k, ctx := keepertest.CheckersKeeper(t)
 	checkers.InitGenesis(ctx, *k, *types.DefaultGenesis())
 	server := keeper.NewMsgServerImpl(*k)
 	context := sdk.WrapSDKContext(ctx)
