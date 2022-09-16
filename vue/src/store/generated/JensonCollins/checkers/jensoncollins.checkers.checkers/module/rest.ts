@@ -14,26 +14,15 @@ export interface CheckersMsgCreateGameResponse {
 }
 
 export interface CheckersMsgPlayMoveResponse {
-  idValue?: string;
+  /** @format int32 */
+  capturedX?: number;
 
-  /** @format int64 */
-  capturedX?: string;
-
-  /** @format int64 */
-  capturedY?: string;
+  /** @format int32 */
+  capturedY?: number;
   winner?: string;
 }
 
 export type CheckersMsgRejectGameResponse = object;
-
-export interface CheckersNextGame {
-  creator?: string;
-
-  /** @format uint64 */
-  idValue?: string;
-  fifoHeadIndex?: string;
-  fifoTailIndex?: string;
-}
 
 /**
  * Params defines the parameters for the module.
@@ -53,10 +42,6 @@ export interface CheckersQueryAllStoredGameResponse {
    *  }
    */
   pagination?: V1Beta1PageResponse;
-}
-
-export interface CheckersQueryGetNextGameResponse {
-  NextGame?: CheckersNextGame;
 }
 
 export interface CheckersQueryGetStoredGameResponse {
@@ -87,6 +72,7 @@ export interface CheckersStoredGame {
   beforeIndex?: string;
   afterIndex?: string;
   deadline?: string;
+  winner?: string;
 }
 
 export interface CheckersSystemInfo {
@@ -359,22 +345,6 @@ export class HttpClient<SecurityDataType = unknown> {
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
-  /**
-   * No description
-   *
-   * @tags Query
-   * @name QueryNextGame
-   * @summary Queries a NextGame by index.
-   * @request GET:/JensonCollins/checkers/checkers/next_game
-   */
-  queryNextGame = (params: RequestParams = {}) =>
-    this.request<CheckersQueryGetNextGameResponse, RpcStatus>({
-      path: `/JensonCollins/checkers/checkers/next_game`,
-      method: "GET",
-      format: "json",
-      ...params,
-    });
-
   /**
    * No description
    *

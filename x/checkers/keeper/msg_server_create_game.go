@@ -29,6 +29,7 @@ func (k msgServer) CreateGame(goCtx context.Context, msg *types.MsgCreateGame) (
 		BeforeIndex: types.NoFifoIndex,
 		AfterIndex:  types.NoFifoIndex,
 		Deadline:    types.FormatDeadline(types.GetNextDeadline(ctx)),
+		Winner:      rules.PieceStrings[rules.NO_PLAYER],
 	}
 	err := storedGame.Validate()
 	if err != nil {
@@ -44,11 +45,10 @@ func (k msgServer) CreateGame(goCtx context.Context, msg *types.MsgCreateGame) (
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(sdk.EventTypeMessage,
 			sdk.NewAttribute(sdk.AttributeKeyModule, "checkers"),
-			sdk.NewAttribute(sdk.AttributeKeyAction, types.StoredGameEventKey),
-			sdk.NewAttribute(types.StoredGameEventCreator, msg.Creator),
-			sdk.NewAttribute(types.StoredGameEventIndex, newIndex),
-			sdk.NewAttribute(types.StoredGameEventRed, msg.Red),
-			sdk.NewAttribute(types.StoredGameEventBlack, msg.Black),
+			sdk.NewAttribute(types.GameCreatedEventCreator, msg.Creator),
+			sdk.NewAttribute(types.GameCreatedEventGameIndex, newIndex),
+			sdk.NewAttribute(types.GameCreatedEventBlack, msg.Black),
+			sdk.NewAttribute(types.GameCreatedEventRed, msg.Red),
 		),
 	)
 

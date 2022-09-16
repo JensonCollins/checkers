@@ -24,30 +24,21 @@ func KeyPrefix(p string) []byte {
 }
 
 const (
-	NextGameKey = "NextGame-value-"
+	GameCreatedEventType      = "new-game-created" // Indicates what event type to listen to
+	GameCreatedEventCreator   = "creator"          // Subsidiary information
+	GameCreatedEventGameIndex = "game-index"       // What game is relevant
+	GameCreatedEventBlack     = "black"            // Is it relevant to me?
+	GameCreatedEventRed       = "red"              // Is it relevant to me?
 )
 
 const (
-	StoredGameEventKey     = "NewGameCreated" // Indicates what key to listen to
-	StoredGameEventCreator = "Creator"
-	StoredGameEventIndex   = "Index" // What game is relevant
-	StoredGameEventRed     = "Red"   // Is it relevant to me?
-	StoredGameEventBlack   = "Black" // Is it relevant to me?
-)
-
-const (
-	PlayMoveEventKey       = "MovePlayed"
-	PlayMoveEventCreator   = "Creator"
-	PlayMoveEventIdValue   = "IdValue"
-	PlayMoveEventCapturedX = "CapturedX"
-	PlayMoveEventCapturedY = "CapturedY"
-	PlayMoveEventWinner    = "Winner"
-)
-
-const (
-	RejectGameEventKey     = "GameRejected"
-	RejectGameEventCreator = "Creator"
-	RejectGameEventIdValue = "IdValue"
+	MovePlayedEventType      = "move-played"
+	MovePlayedEventCreator   = "creator"
+	MovePlayedEventGameIndex = "game-index"
+	MovePlayedEventCapturedX = "captured-x"
+	MovePlayedEventCapturedY = "captured-y"
+	MovePlayedEventWinner    = "winner"
+	MovePlayedEventBoard     = "board"
 )
 
 const (

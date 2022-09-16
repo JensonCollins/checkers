@@ -1,8 +1,7 @@
 /* eslint-disable */
 import { Params } from "../checkers/params";
-import { NextGame } from "../checkers/next_game";
-import { StoredGame } from "../checkers/stored_game";
 import { SystemInfo } from "../checkers/system_info";
+import { StoredGame } from "../checkers/stored_game";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "jensoncollins.checkers.checkers";
@@ -10,10 +9,9 @@ export const protobufPackage = "jensoncollins.checkers.checkers";
 /** GenesisState defines the checkers module's genesis state. */
 export interface GenesisState {
   params: Params | undefined;
-  nextGame: NextGame | undefined;
-  storedGameList: StoredGame[];
-  /** this line is used by starport scaffolding # genesis/proto/state */
   systemInfo: SystemInfo | undefined;
+  /** this line is used by starport scaffolding # genesis/proto/state */
+  storedGameList: StoredGame[];
 }
 
 const baseGenesisState: object = {};
@@ -23,14 +21,11 @@ export const GenesisState = {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
-    if (message.nextGame !== undefined) {
-      NextGame.encode(message.nextGame, writer.uint32(18).fork()).ldelim();
+    if (message.systemInfo !== undefined) {
+      SystemInfo.encode(message.systemInfo, writer.uint32(18).fork()).ldelim();
     }
     for (const v of message.storedGameList) {
       StoredGame.encode(v!, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.systemInfo !== undefined) {
-      SystemInfo.encode(message.systemInfo, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -47,15 +42,12 @@ export const GenesisState = {
           message.params = Params.decode(reader, reader.uint32());
           break;
         case 2:
-          message.nextGame = NextGame.decode(reader, reader.uint32());
+          message.systemInfo = SystemInfo.decode(reader, reader.uint32());
           break;
         case 3:
           message.storedGameList.push(
             StoredGame.decode(reader, reader.uint32())
           );
-          break;
-        case 4:
-          message.systemInfo = SystemInfo.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -73,20 +65,15 @@ export const GenesisState = {
     } else {
       message.params = undefined;
     }
-    if (object.nextGame !== undefined && object.nextGame !== null) {
-      message.nextGame = NextGame.fromJSON(object.nextGame);
+    if (object.systemInfo !== undefined && object.systemInfo !== null) {
+      message.systemInfo = SystemInfo.fromJSON(object.systemInfo);
     } else {
-      message.nextGame = undefined;
+      message.systemInfo = undefined;
     }
     if (object.storedGameList !== undefined && object.storedGameList !== null) {
       for (const e of object.storedGameList) {
         message.storedGameList.push(StoredGame.fromJSON(e));
       }
-    }
-    if (object.systemInfo !== undefined && object.systemInfo !== null) {
-      message.systemInfo = SystemInfo.fromJSON(object.systemInfo);
-    } else {
-      message.systemInfo = undefined;
     }
     return message;
   },
@@ -95,9 +82,9 @@ export const GenesisState = {
     const obj: any = {};
     message.params !== undefined &&
       (obj.params = message.params ? Params.toJSON(message.params) : undefined);
-    message.nextGame !== undefined &&
-      (obj.nextGame = message.nextGame
-        ? NextGame.toJSON(message.nextGame)
+    message.systemInfo !== undefined &&
+      (obj.systemInfo = message.systemInfo
+        ? SystemInfo.toJSON(message.systemInfo)
         : undefined);
     if (message.storedGameList) {
       obj.storedGameList = message.storedGameList.map((e) =>
@@ -106,10 +93,6 @@ export const GenesisState = {
     } else {
       obj.storedGameList = [];
     }
-    message.systemInfo !== undefined &&
-      (obj.systemInfo = message.systemInfo
-        ? SystemInfo.toJSON(message.systemInfo)
-        : undefined);
     return obj;
   },
 
@@ -121,20 +104,15 @@ export const GenesisState = {
     } else {
       message.params = undefined;
     }
-    if (object.nextGame !== undefined && object.nextGame !== null) {
-      message.nextGame = NextGame.fromPartial(object.nextGame);
+    if (object.systemInfo !== undefined && object.systemInfo !== null) {
+      message.systemInfo = SystemInfo.fromPartial(object.systemInfo);
     } else {
-      message.nextGame = undefined;
+      message.systemInfo = undefined;
     }
     if (object.storedGameList !== undefined && object.storedGameList !== null) {
       for (const e of object.storedGameList) {
         message.storedGameList.push(StoredGame.fromPartial(e));
       }
-    }
-    if (object.systemInfo !== undefined && object.systemInfo !== null) {
-      message.systemInfo = SystemInfo.fromPartial(object.systemInfo);
-    } else {
-      message.systemInfo = undefined;
     }
     return message;
   },

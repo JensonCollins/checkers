@@ -3,7 +3,6 @@ package jensoncollins.checkers.checkers;
 
 import "gogoproto/gogo.proto";
 import "checkers/params.proto";
-import "checkers/next_game.proto";
 import "checkers/stored_game.proto";
 import "checkers/system_info.proto";
 // this line is used by starport scaffolding # genesis/proto/import
@@ -13,8 +12,7 @@ option go_package = "github.com/JensonCollins/checkers/x/checkers/types";
 // GenesisState defines the checkers module's genesis state.
 message GenesisState {
   Params params = 1 [(gogoproto.nullable) = false];
-  NextGame nextGame = 2;
+  SystemInfo systemInfo = 2 [(gogoproto.nullable) = false];
   repeated StoredGame storedGameList = 3 [(gogoproto.nullable) = false];
-  SystemInfo systemInfo = 4;
   // this line is used by starport scaffolding # genesis/proto/state
 }

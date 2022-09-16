@@ -5,7 +5,6 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "checkers/params.proto";
-import "checkers/next_game.proto";
 import "checkers/stored_game.proto";
 import "checkers/system_info.proto";
 // this line is used by starport scaffolding # 1
@@ -18,10 +17,6 @@ service Query {
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/JensonCollins/checkers/checkers/params";
   }
-  // Queries a NextGame by index.
-	rpc NextGame(QueryGetNextGameRequest) returns (QueryGetNextGameResponse) {
-		option (google.api.http).get = "/JensonCollins/checkers/checkers/next_game";
-	}
 // Queries a StoredGame by index.
 	rpc StoredGame(QueryGetStoredGameRequest) returns (QueryGetStoredGameResponse) {
 		option (google.api.http).get = "/JensonCollins/checkers/checkers/stored_game/{index}";
@@ -48,11 +43,6 @@ message QueryParamsResponse {
   Params params = 1 [(gogoproto.nullable) = false];
 }
 
-message QueryGetNextGameRequest {}
-
-message QueryGetNextGameResponse {
-	NextGame NextGame = 1 [(gogoproto.nullable) = false];
-}
 message QueryGetStoredGameRequest {
 	  string index = 1;
 

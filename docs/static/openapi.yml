@@ -30176,48 +30176,6 @@ paths:
           format: uint64
       tags:
         - Query
-  /JensonCollins/checkers/checkers/next_game:
-    get:
-      summary: Queries a NextGame by index.
-      operationId: JensoncollinsCheckersCheckersNextGame
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              NextGame:
-                type: object
-                properties:
-                  creator:
-                    type: string
-                  idValue:
-                    type: string
-                    format: uint64
-                  fifoHeadIndex:
-                    type: string
-                  fifoTailIndex:
-                    type: string
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      tags:
-        - Query
   /JensonCollins/checkers/checkers/params:
     get:
       summary: Parameters queries the parameters of the module.
@@ -30287,6 +30245,8 @@ paths:
                     afterIndex:
                       type: string
                     deadline:
+                      type: string
+                    winner:
                       type: string
               pagination:
                 type: object
@@ -30380,16 +30340,6 @@ paths:
           in: query
           required: false
           type: boolean
-        - name: pagination.reverse
-          description: >-
-            reverse is set to true if results are to be returned in the
-            descending order.
-
-
-            Since: cosmos-sdk 0.43
-          in: query
-          required: false
-          type: boolean
       tags:
         - Query
   '/JensonCollins/checkers/checkers/stored_game/{index}':
@@ -30423,6 +30373,8 @@ paths:
                   afterIndex:
                     type: string
                   deadline:
+                    type: string
+                  winner:
                     type: string
         default:
           description: An unexpected error response.
@@ -51879,30 +51831,16 @@ definitions:
   jensoncollins.checkers.checkers.MsgPlayMoveResponse:
     type: object
     properties:
-      idValue:
-        type: string
       capturedX:
-        type: string
-        format: int64
+        type: integer
+        format: int32
       capturedY:
-        type: string
-        format: int64
+        type: integer
+        format: int32
       winner:
         type: string
   jensoncollins.checkers.checkers.MsgRejectGameResponse:
     type: object
-  jensoncollins.checkers.checkers.NextGame:
-    type: object
-    properties:
-      creator:
-        type: string
-      idValue:
-        type: string
-        format: uint64
-      fifoHeadIndex:
-        type: string
-      fifoTailIndex:
-        type: string
   jensoncollins.checkers.checkers.Params:
     type: object
     description: Params defines the parameters for the module.
@@ -51933,6 +51871,8 @@ definitions:
               type: string
             deadline:
               type: string
+            winner:
+              type: string
       pagination:
         type: object
         properties:
@@ -51958,21 +51898,6 @@ definitions:
                    repeated Bar results = 1;
                    PageResponse page = 2;
            }
-  jensoncollins.checkers.checkers.QueryGetNextGameResponse:
-    type: object
-    properties:
-      NextGame:
-        type: object
-        properties:
-          creator:
-            type: string
-          idValue:
-            type: string
-            format: uint64
-          fifoHeadIndex:
-            type: string
-          fifoTailIndex:
-            type: string
   jensoncollins.checkers.checkers.QueryGetStoredGameResponse:
     type: object
     properties:
@@ -51997,6 +51922,8 @@ definitions:
           afterIndex:
             type: string
           deadline:
+            type: string
+          winner:
             type: string
   jensoncollins.checkers.checkers.QueryGetSystemInfoResponse:
     type: object
@@ -52039,6 +51966,8 @@ definitions:
       afterIndex:
         type: string
       deadline:
+        type: string
+      winner:
         type: string
   jensoncollins.checkers.checkers.SystemInfo:
     type: object

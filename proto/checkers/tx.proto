@@ -25,7 +25,7 @@ message MsgCreateGameResponse {
 
 message MsgPlayMove {
   string creator = 1;
-  string idValue = 2;
+  string gameIndex = 2;
   uint64 fromX = 3;
   uint64 fromY = 4;
   uint64 toX = 5;
@@ -33,15 +33,14 @@ message MsgPlayMove {
 }
 
 message MsgPlayMoveResponse {
-  string idValue = 1;
-  int64 capturedX = 2;
-  int64 capturedY = 3;
-  string winner = 4;
+  int32 capturedX = 1;
+  int32 capturedY = 2;
+  string winner = 3;
 }
 
 message MsgRejectGame {
   string creator = 1;
-  string GameIndex = 2;
+  string gameIndex = 2;
 }
 
 message MsgRejectGameResponse {
