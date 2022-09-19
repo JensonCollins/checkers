@@ -20,6 +20,10 @@ func CmdCreateGame() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			argRed := args[0]
 			argBlack := args[1]
+			argWager, err := strconv.ParseUint(args[2], 10, 64)
+			if err != nil {
+				return err
+			}
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -30,6 +34,7 @@ func CmdCreateGame() *cobra.Command {
 				clientCtx.GetFromAddress().String(),
 				argRed,
 				argBlack,
+				argWager,
 			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
